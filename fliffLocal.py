@@ -1,3 +1,6 @@
+from email.policy import default
+from getpass import getpass
+
 import schedule
 import time
 import configparser
@@ -9,14 +12,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import re
 import undetected_chromedriver as uc
-
-# Load the config file
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-# Extract values from the config file
-email = config.get('Credentials', 'email')
-password = config.get('Credentials', 'password')
 
 # URL to navigate to
 url = "https://sports.getfliff.com/shop"
@@ -179,9 +174,6 @@ def claim_coins():
     # Close the driver to end this attempt
     driver.quit()
 
-# Schedule the task to run every 1 minute initially
-claim_coins()
-
 
 def schedule_next_claim():
     # Run the claim_coins function
@@ -194,7 +186,23 @@ def print_schedule():
     for job in schedule.get_jobs():
         print(job)
 
-while True:
-    schedule.run_pending()
-    print_schedule()
-    time.sleep(1)
+
+if __name__ == '__main__':
+    # Load the config file
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    # Extract values from the config file
+    email = config.get('Credentials', 'email')
+    password = config.get('Credentials', 'password', fallback=None)
+    if not password:
+        password = getpass(f'Please enter your password to {email}: ')
+
+    print(f'{password=}')
+    # Schedule the task to run every 1 minute initially
+    claim_coins()
+
+    while True:
+        schedule.run_pending()
+        print_schedule()
+        time.sleep(1)
