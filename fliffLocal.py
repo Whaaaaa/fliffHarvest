@@ -1,35 +1,22 @@
-import schedule
-import time
-import configparser
+import getpass  # Import getpass to hide password input
+import re
 import subprocess
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+import sys  # Import sys to detect the platform
+import time
+
+import configparser
+import schedule
+import undetected_chromedriver as uc
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-import re
-import sys  # Import sys to detect the platform
-import undetected_chromedriver as uc
-import getpass  # Import getpass to hide password input
 
-# Load the config file
-config = configparser.ConfigParser()
-config.read('config.ini')
 
-# Extract values from the config file
-email = config.get('Credentials', 'email')
-print("Email loaded successfully.")
+FLIFF_URL = "https://sports.getfliff.com/shop"    # URL to navigate to
 
-if config.has_option('Credentials', 'password'):
-    password = config.get('Credentials', 'password')
-    print("Password loaded from config.")
-else:
-    print("Please enter your password (input will be hidden):")
-    password = getpass.getpass("Password: ")
 
-# URL to navigate to
-url = "https://sports.getfliff.com/shop"
 def get_chrome_version():
     try:
         # Determine the platform and get the Chrome version accordingly
@@ -47,6 +34,8 @@ def get_chrome_version():
     except Exception as e:
         print(f"Error while getting Chrome version: {e}")
         return 130  # Default to version 130 if unable to determine
+
+
 def convert_time_to_minutes(cleaned_time_string):
     time_pattern = r"(\d{2}) : (\d{2}) : (\d{2})"
     match = re.match(time_pattern, cleaned_time_string)
@@ -56,6 +45,7 @@ def convert_time_to_minutes(cleaned_time_string):
         total_minutes = hours * 60 + minutes + 1  # Add an additional minute as requested
         return total_minutes
     return 1  # Default to 1 minute if the pattern doesn't match
+
 
 def click_claim_buttons(driver):
     try:
@@ -84,7 +74,6 @@ def click_claim_buttons(driver):
         driver.quit()
         schedule.clear()
         schedule.every(121).minutes.do(claim_coins)  # Update the schedule with new wait time
-        return
     except Exception as e:
         try:
             # If the first "Claim Now" button is not found, locate the countdown element
@@ -106,7 +95,7 @@ def click_claim_buttons(driver):
 
         # Close the driver to end this attempt and continue with scheduling
         driver.quit()
-        return  # End the function execution, but keep the schedule
+        # End the function execution, but keep the schedule
 
 def claim_coins():
     options = uc.ChromeOptions()
@@ -127,7 +116,7 @@ def claim_coins():
     #driver = webdriver.Chrome(options=chrome_options)
 
     # Launch the URL in Chrome with mobile emulation
-    driver.get(url)
+    driver.get(FLIFF_URL)
 
     try:
         # Try to locate and click the "Sign In" button
@@ -206,9 +195,6 @@ def claim_coins():
     # Close the driver to end this attempt
     driver.quit()
 
-# Schedule the task to run every 1 minute initially
-claim_coins()
-
 
 def schedule_next_claim():
     # Run the claim_coins function
@@ -221,7 +207,26 @@ def print_schedule():
     for job in schedule.get_jobs():
         print(job)
 
-while True:
-    schedule.run_pending()
-    print_schedule()
-    time.sleep(1)
+
+if __name__ == '__main__':
+    # Load the config file
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    # Extract values from the config file
+    email = config.get('Credentials', 'email')
+    print(f"Email {email} loaded successfully.")
+
+    if config.has_option('Credentials', 'password'):
+        password = config.get('Credentials', 'password')
+        print("Password loaded from config.")
+    else:
+        password = getpass.getpass(f'Please enter your password to {email}: ')
+
+    # Schedule the task to run every 1 minute initially
+    claim_coins()
+
+    while True:
+        schedule.run_pending()
+        print_schedule()
+        time.sleep(1)

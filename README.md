@@ -19,8 +19,8 @@ This project requires:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/fliff-coin-claimer.git
-   cd fliff-coin-claimer
+   git clone https://github.com/Whaaaaa/fliffHarvest.git
+   cd fliffHarvest
    ```
 
 2. **Set Up Dependencies**:
@@ -30,7 +30,7 @@ This project requires:
    ```
 
 3. **Configuration**:
-   Create a `config.ini` file in the project directory with your Google login credentials:
+   Edit the `config.ini` file in the project directory with your Google login credentials, or leave out your password to enter it after running the script:
    ```ini
    [Credentials]
    email = your_email@gmail.com
@@ -42,7 +42,7 @@ This project requires:
 
 Run the script with:
 ```bash
-python fliff_coin_claimer.py
+python fliffLocal.py
 ```
 
 The script will:
