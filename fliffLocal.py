@@ -19,7 +19,6 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 
-
 # URL to navigate to
 url = "https://sports.getfliff.com/shop"
 def get_chrome_version():
