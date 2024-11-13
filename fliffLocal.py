@@ -21,16 +21,7 @@ import getpass  # Import getpass to hide password input
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-# Extract values from the config file
-email = config.get('Credentials', 'email')
-print("Email loaded successfully.")
 
-if config.has_option('Credentials', 'password'):
-    password = config.get('Credentials', 'password')
-    print("Password loaded from config.")
-else:
-    print("Please enter your password (input will be hidden):")
-    password = getpass.getpass("Password: ")
 
 # URL to navigate to
 url = "https://sports.getfliff.com/shop"
@@ -230,11 +221,14 @@ if __name__ == '__main__':
 
     # Extract values from the config file
     email = config.get('Credentials', 'email')
-    password = config.get('Credentials', 'password', fallback=None)
-    if not password:
-        password = getpass(f'Please enter your password to {email}: ')
+    print(f"Email {email} loaded successfully.")
 
-    print(f'{password=}')
+    if config.has_option('Credentials', 'password'):
+        password = config.get('Credentials', 'password')
+        print("Password loaded from config.")
+    else:
+        password = getpass.getpass(f'Please enter your password to {email}: ')
+
     # Schedule the task to run every 1 minute initially
     claim_coins()
 
