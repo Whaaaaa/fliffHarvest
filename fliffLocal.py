@@ -8,6 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import re
+import undetected_chromedriver as uc
 
 # Load the config file
 config = configparser.ConfigParser()
@@ -83,13 +84,21 @@ def click_claim_buttons(driver):
         return  # End the function execution, but keep the schedule
 
 def claim_coins():
-    chrome_options = Options()
-    chrome_options.add_argument(f"user-data-dir={chrome_user_data_dir}")  # Correct profile path
-    chrome_options.add_argument("--profile-directory=Default")  # Specify the profile directory if needed
-    chrome_options.add_argument("--user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1")
+    options = uc.ChromeOptions()
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--user-agent=Mozilla/5.0 (Linux; Android 10; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36")
+
+
+    driver = uc.Chrome(options=options, version_main=130)  # Specify the Chrome version to match the installed version
+    #chrome_options = Options()
+    #chrome_options.add_argument(f"user-data-dir={chrome_user_data_dir}")  # Correct profile path
+    #chrome_options.add_argument("--profile-directory=Default")  # Specify the profile directory if needed
+    #chrome_options.add_argument("--user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1")
 
     # Set up the Chrome driver with the specified options
-    driver = webdriver.Chrome(options=chrome_options)
+    #driver = webdriver.Chrome(options=chrome_options)
 
     # Launch the URL in Chrome with mobile emulation
     driver.get(url)
@@ -153,6 +162,17 @@ def claim_coins():
             )
             password_input.send_keys(password)
             password_input.send_keys(Keys.RETURN)
+            WebDriverWait(driver, 5000).until(EC.number_of_windows_to_be(1))
+            driver.switch_to.window(driver.window_handles[0])
+            WebDriverWait(driver, 500).until(EC.url_contains('https://sports.getfliff.com/channels?channelId=-333'))
+            time.sleep(5)
+
+            fliff_coin_icon = WebDriverWait(driver, 100).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, "//i[contains(@class, 'icon-fliff-coin tab-item__icon tab-item__icon--large')]"))
+            )
+            fliff_coin_icon.click()
+            click_claim_buttons(driver)
 
     except Exception as e:
         print(f"Error occurred while processing claim: {e}")
