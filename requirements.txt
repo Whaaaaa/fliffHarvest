@@ -1,0 +1,4 @@
+selenium
+schedule
+undetected-chromedriver
+configparser
