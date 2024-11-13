@@ -14,13 +14,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
 
-# Load the config file
-config = configparser.ConfigParser()
-config.read('config.ini')
+FLIFF_URL = "https://sports.getfliff.com/shop"    # URL to navigate to
 
 
-# URL to navigate to
-url = "https://sports.getfliff.com/shop"
 def get_chrome_version():
     try:
         # Determine the platform and get the Chrome version accordingly
@@ -118,7 +114,7 @@ def claim_coins():
     #driver = webdriver.Chrome(options=chrome_options)
 
     # Launch the URL in Chrome with mobile emulation
-    driver.get(url)
+    driver.get(FLIFF_URL)
 
     try:
         # Try to locate and click the "Sign In" button
