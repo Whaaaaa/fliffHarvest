@@ -17,7 +17,6 @@ config.read('config.ini')
 # Extract values from the config file
 email = config.get('Credentials', 'email')
 password = config.get('Credentials', 'password')
-chrome_user_data_dir = config.get('Paths', 'chrome_user_data_dir')
 
 # URL to navigate to
 url = "https://sports.getfliff.com/shop"
