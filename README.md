@@ -30,14 +30,11 @@ This project requires:
    ```
 
 3. **Configuration**:
-   Create a `config.ini` file in the project directory with your login credentials and Chrome user data directory:
+   Create a `config.ini` file in the project directory with your Google login credentials:
    ```ini
    [Credentials]
    email = your_email@gmail.com
    password = your_password
-
-   [Paths]
-   chrome_user_data_dir = /path/to/chrome/user/data
    ```
    - Replace `your_email@gmail.com` and `your_password` with your actual Fliff account email and password.
    - Set `chrome_user_data_dir` to the path of your Chrome profile data directory if you’re using a specific Chrome profile.
