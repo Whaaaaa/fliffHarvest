@@ -34,6 +34,8 @@ def get_chrome_version():
     except Exception as e:
         print(f"Error while getting Chrome version: {e}")
         return 130  # Default to version 130 if unable to determine
+
+
 def convert_time_to_minutes(cleaned_time_string):
     time_pattern = r"(\d{2}) : (\d{2}) : (\d{2})"
     match = re.match(time_pattern, cleaned_time_string)
@@ -43,6 +45,7 @@ def convert_time_to_minutes(cleaned_time_string):
         total_minutes = hours * 60 + minutes + 1  # Add an additional minute as requested
         return total_minutes
     return 1  # Default to 1 minute if the pattern doesn't match
+
 
 def click_claim_buttons(driver):
     try:
@@ -71,7 +74,6 @@ def click_claim_buttons(driver):
         driver.quit()
         schedule.clear()
         schedule.every(121).minutes.do(claim_coins)  # Update the schedule with new wait time
-        return
     except Exception as e:
         try:
             # If the first "Claim Now" button is not found, locate the countdown element
@@ -93,7 +95,7 @@ def click_claim_buttons(driver):
 
         # Close the driver to end this attempt and continue with scheduling
         driver.quit()
-        return  # End the function execution, but keep the schedule
+        # End the function execution, but keep the schedule
 
 def claim_coins():
     options = uc.ChromeOptions()
