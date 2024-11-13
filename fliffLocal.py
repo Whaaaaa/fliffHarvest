@@ -1,6 +1,7 @@
 import schedule
 import time
 import configparser
+import subprocess
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -11,7 +12,6 @@ import re
 import sys  # Import sys to detect the platform
 import undetected_chromedriver as uc
 import getpass  # Import getpass to hide password input
-import subprocess
 
 # Load the config file
 config = configparser.ConfigParser()
