@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import re
 import undetected_chromedriver as uc
+import getpass  # Import getpass to hide password input
 
 # Load the config file
 config = configparser.ConfigParser()
@@ -16,10 +17,14 @@ config.read('config.ini')
 
 # Extract values from the config file
 email = config.get('Credentials', 'email')
+print("Email loaded successfully.")
+
 if config.has_option('Credentials', 'password'):
     password = config.get('Credentials', 'password')
+    print("Password loaded from config.")
 else:
-    password = input("Enter your password: ")
+    print("Please enter your password (input will be hidden):")
+    password = getpass.getpass("Password: ")
 
 # URL to navigate to
 url = "https://sports.getfliff.com/shop"
