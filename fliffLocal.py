@@ -1,20 +1,17 @@
-from email.policy import default
-from getpass import getpass
+import re
+import sys  # Import sys to detect the platform
+import getpass  # Import getpass to hide password input
 
 import schedule
 import time
 import configparser
 import subprocess
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+
+import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-import re
-import sys  # Import sys to detect the platform
-import undetected_chromedriver as uc
-import getpass  # Import getpass to hide password input
 
 
 # Load the config file
