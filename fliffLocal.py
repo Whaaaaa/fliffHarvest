@@ -1,13 +1,13 @@
-import re
-import sys  # Import sys to detect the platform
 import getpass  # Import getpass to hide password input
-
-import schedule
-import time
-import configparser
+import re
 import subprocess
+import sys  # Import sys to detect the platform
+import time
 
+import configparser
+import schedule
 import undetected_chromedriver as uc
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
