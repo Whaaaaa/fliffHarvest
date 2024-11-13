@@ -16,7 +16,10 @@ config.read('config.ini')
 
 # Extract values from the config file
 email = config.get('Credentials', 'email')
-password = config.get('Credentials', 'password')
+if config.has_option('Credentials', 'password'):
+    password = config.get('Credentials', 'password')
+else:
+    password = input("Enter your password: ")
 
 # URL to navigate to
 url = "https://sports.getfliff.com/shop"
