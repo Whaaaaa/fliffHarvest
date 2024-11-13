@@ -37,8 +37,7 @@ This project requires:
    password = your_password
    ```
    - Replace `your_email@gmail.com` and `your_password` with your actual Fliff account email and password.
-   - Set `chrome_user_data_dir` to the path of your Chrome profile data directory if you’re using a specific Chrome profile.
-
+     
 ## Usage
 
 Run the script with:
