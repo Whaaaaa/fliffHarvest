@@ -4,6 +4,7 @@ from getpass import getpass
 import schedule
 import time
 import configparser
+import subprocess
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -11,11 +12,45 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import re
+import sys  # Import sys to detect the platform
 import undetected_chromedriver as uc
+import getpass  # Import getpass to hide password input
+
+
+# Load the config file
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+# Extract values from the config file
+email = config.get('Credentials', 'email')
+print("Email loaded successfully.")
+
+if config.has_option('Credentials', 'password'):
+    password = config.get('Credentials', 'password')
+    print("Password loaded from config.")
+else:
+    print("Please enter your password (input will be hidden):")
+    password = getpass.getpass("Password: ")
 
 # URL to navigate to
 url = "https://sports.getfliff.com/shop"
+def get_chrome_version():
+    try:
+        # Determine the platform and get the Chrome version accordingly
+        command = ""
+        if sys.platform == "win32":
+            command = r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version'
+        elif sys.platform == "darwin":
+            command = r"/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version"
+        else:
+            command = r"google-chrome --version"
 
+        version_output = subprocess.check_output(command, shell=True).decode('utf-8')
+        version_number = re.search(r"(\d+)\.", version_output).group(1)
+        return int(version_number)
+    except Exception as e:
+        print(f"Error while getting Chrome version: {e}")
+        return 130  # Default to version 130 if unable to determine
 def convert_time_to_minutes(cleaned_time_string):
     time_pattern = r"(\d{2}) : (\d{2}) : (\d{2})"
     match = re.match(time_pattern, cleaned_time_string)
@@ -84,8 +119,9 @@ def claim_coins():
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--user-agent=Mozilla/5.0 (Linux; Android 10; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36")
 
+    version_main = get_chrome_version()
 
-    driver = uc.Chrome(options=options, version_main=130)  # Specify the Chrome version to match the installed version
+    driver = uc.Chrome(options=options, version_main=version_main)  # Specify the Chrome version dynamically
     #chrome_options = Options()
     #chrome_options.add_argument(f"user-data-dir={chrome_user_data_dir}")  # Correct profile path
     #chrome_options.add_argument("--profile-directory=Default")  # Specify the profile directory if needed
